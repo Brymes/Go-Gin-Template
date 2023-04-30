@@ -2,51 +2,64 @@ package api
 
 import (
 	"fmt"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 )
 
+var jwtMiddleware *jwt.GinJWTMiddleware
+
 func Server() {
+	//initJWT()
 
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	//config.AllowHeaders = []string{"Origin", "Authorization", "Content-Length", "Content-Type"}
-	//config.ExposeHeaders = []string{"Content-Length"}
-	//config.AllowOrigins = []string{"*"}
+	router := prepareServer()
 
-	router := gin.Default()
-	router.Use(cors.New(config))
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
+	CoreRoutes(router)
 
-	//JWT Middleware
-	/*	jwtMiddleware := JwtMiddleWareConfig()
-			errInit := jwtMiddleware.MiddlewareInit()
-
-			if errInit != nil {
-				log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
-			}
-
-		router.POST("/login", jwtMiddleware.LoginHandler)
-
-		auth := router.Group("/")
-
-		auth.Use(jwtMiddleware.MiddlewareFunc())
-		auth.POST("protectedEndpoint", protectedEndpoint)
-	*/
-
-	router.POST("endpoint", EndPointName)
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Welcome 🚀",
+		})
+	})
 
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = "8888"
+		port = "8081"
 	}
+
+	log.Println("Server is running")
 	err := router.Run(fmt.Sprintf(":%v", port))
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+}
+
+func initJWT() {
+	//jwtMiddleware = controllers.JwtMiddleWareConfig()
+	err := jwtMiddleware.MiddlewareInit()
+	if err != nil {
+		log.Fatal("authMiddleware.MiddlewareInit() Error:" + err.Error())
+	}
+}
+
+func prepareServer() *gin.Engine {
+
+	corsConfig := cors.DefaultConfig()
+	// corsConfig.AllowAllOrigins = true
+	corsConfig.AllowHeaders = []string{"Origin", "Authorization", "Content-Length", "Content-Type"}
+	corsConfig.ExposeHeaders = []string{"Content-Length"}
+	corsConfig.AllowOrigins = []string{"*", "http://localhost:3000"}
+
+	router := gin.Default()
+	// Registering MiddleWares
+	router.Use(cors.New(corsConfig))
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
+	return router
+
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.InitDb()
+	config.InitDB()
 }
 
 func main() {
