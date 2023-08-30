@@ -1,8 +1,9 @@
 package controllers
 
-/*
 import (
 	"App-Name/config"
+	"App-Name/models"
+	"App-Name/utils"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -104,4 +105,3 @@ func JwtMiddleWareConfig() *jwt.GinJWTMiddleware {
 	return authMiddleware
 
 }
-*/

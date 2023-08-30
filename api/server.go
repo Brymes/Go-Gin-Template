@@ -1,6 +1,7 @@
 package api
 
 import (
+	"App-Name/controllers"
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
@@ -39,7 +40,7 @@ func Server() {
 }
 
 func initJWT() {
-	//jwtMiddleware = controllers.JwtMiddleWareConfig()
+	jwtMiddleware = controllers.JwtMiddleWareConfig()
 	err := jwtMiddleware.MiddlewareInit()
 	if err != nil {
 		log.Fatal("authMiddleware.MiddlewareInit() Error:" + err.Error())
