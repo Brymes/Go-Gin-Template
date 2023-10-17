@@ -25,6 +25,9 @@ type DBResponse struct {
 
 func (s *SQLModel) HandleErr(result *gorm.DB, logger *log.Logger) {
 	s.DBResponse.Message, s.DBResponse.Status = s.HandleDbError(result, logger)
+	if s.Status != 0 {
+		panic("Database Error")
+	}
 }
 
 func (s *SQLModel) HandleDbError(result *gorm.DB, logger *log.Logger) (string, int) {

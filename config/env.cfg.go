@@ -14,14 +14,15 @@ var (
 func LoadEnv() {
 	_ = godotenv.Load()
 
-	//InitSendGrid()
+	SendGridAPIKey = GetEnv("SENDGRID_API_KEY")
 }
 
-func InitSendGrid() {
-	SendGridAPIKey = os.Getenv("SENDGRID_API_KEY")
-	if SendGridAPIKey == "" {
-		log.Fatalln("Kindly Pass SendGrid API key as an environment variable named SENDGRID_API_KEY")
+func GetEnv(key string) string {
+	val := os.Getenv(key)
+	if val == "" {
+		log.Fatalln("Kindly Pass the environment variable named: ", key)
 	}
+	return val
 }
 
 func InitDSN(name string) string {

@@ -6,6 +6,7 @@ import (
 )
 
 func init() {
+	config.LoadEnv()
 	config.InitDB()
 }
 
